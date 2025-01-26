@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KDS - Modern Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>TOGG</h2>
+            <ul class="menu">
+                <li><a href="dashboard.html"><i class="fas fa-home"></i><span class="menu-text">Ana Sayfa</span></a></li>
+                <li><a href="kullanici.html"><i class="fas fa-user"></i><span class="menu-text">Kullanıcı Talepleri</span></a></li>
+                <li><a href="analiz.html"><i class="fas fa-chart-line"></i><span class="menu-text">Haritalı Analiz</span></a></li>
+                <li><a href="satis.html"><i class="fas fa-solid fa-truck"></i><span class="menu-text">Satış</span></a></li>
+                <li><a href="tahminleme.html"><i class="fas fa-solid fa-business-time"></i><span class="menu-text">Tahminleme</span></a></li>
+                <li><a href="istasyon.html"><i class="fas fa-solid fa-bolt"></i><span class="menu-text">İstasyon</span></a></li>
+            </ul>
+            <ul class="settings">
+                <li><a href="#"><i class="fas fa-cog"></i><span class="menu-text">Ayarlar</span></a></li>
+            </ul>
+            <ul class="logout">
+                <li><a href="#" id="logout-button"><i class="fas fa-sign-out-alt"></i><span class="menu-text">Çıkış Yap</span></a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <header class="main-header">
+                <p>Tahminleme Analizleri</p>
+            </header>
+            <div class="prediction-container">
+                <div class="widget-grid">
+                    <!-- Chart Widget -->
+                    <div class="chart-widget">
+                        <div class="chart-container">
+                            <canvas id="predictionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Prediction Form Widget -->
+                    <div class="prediction-widget">
+                        <div class="prediction-form">
+                            <div class="form-header">
+                                <h3>Tahmin Parametreleri</h3>
+                            </div>
+                            <div class="compact-form">
+                                <div class="input-row">
+                                    <div class="input-group">
+                                        <label>İl:</label>
+                                        <select id="city">
+                                            <option value="">Seçiniz</option>
+                                            <option value="1">Adana</option>
+                                            <option value="2">Adıyaman</option>
+                                            <option value="3">Afyonkarahisar</option>
+                                            <option value="4">Ağrı</option>
+                                            <option value="5">Amasya</option>
+                                            <option value="6">Ankara</option>
+                                            <option value="7">Antalya</option>
+                                            <option value="8">Artvin</option>
+                                            <option value="9">Aydın</option>
+                                            <option value="10">Balıkesir</option>
+                                            <option value="11">Bilecik</option>
+                                            <option value="12">Bingöl</option>
+                                            <option value="13">Bitlis</option>
+                                            <option value="14">Bolu</option>
+                                            <option value="15">Burdur</option>
+                                            <option value="16">Bursa</option>
+                                            <option value="17">Çanakkale</option>
+                                            <option value="18">Çankırı</option>
+                                            <option value="19">Çorum</option>
+                                            <option value="20">Denizli</option>
+                                            <option value="21">Diyarbakır</option>
+                                            <option value="22">Edirne</option>
+                                            <option value="23">Elazığ</option>
+                                            <option value="24">Erzincan</option>
+                                            <option value="25">Erzurum</option>
+                                            <option value="26">Eskişehir</option>
+                                            <option value="27">Gaziantep</option>
+                                            <option value="28">Giresun</option>
+                                            <option value="29">Gümüşhane</option>
+                                            <option value="30">Hakkari</option>
+                                            <option value="31">Hatay</option>
+                                            <option value="32">Isparta</option>
+                                            <option value="33">Mersin</option>
+                                            <option value="34">İstanbul</option>
+                                            <option value="35">İzmir</option>
+                                            <option value="36">Kars</option>
+                                            <option value="37">Kastamonu</option>
+                                            <option value="38">Kayseri</option>
+                                            <option value="39">Kırklareli</option>
+                                            <option value="40">Kırşehir</option>
+                                            <option value="41">Kocaeli</option>
+                                            <option value="42">Konya</option>
+                                            <option value="43">Kütahya</option>
+                                            <option value="44">Malatya</option>
+                                            <option value="45">Manisa</option>
+                                            <option value="46">Kahramanmaraş</option>
+                                            <option value="47">Mardin</option>
+                                            <option value="48">Muğla</option>
+                                            <option value="49">Muş</option>
+                                            <option value="50">Nevşehir</option>
+                                            <option value="51">Niğde</option>
+                                            <option value="52">Ordu</option>
+                                            <option value="53">Rize</option>
+                                            <option value="54">Sakarya</option>
+                                            <option value="55">Samsun</option>
+                                            <option value="56">Siirt</option>
+                                            <option value="57">Sinop</option>
+                                            <option value="58">Sivas</option>
+                                            <option value="59">Tekirdağ</option>
+                                            <option value="60">Tokat</option>
+                                            <option value="61">Trabzon</option>
+                                            <option value="62">Tunceli</option>
+                                            <option value="63">Şanlıurfa</option>
+                                            <option value="64">Uşak</option>
+                                            <option value="65">Van</option>
+                                            <option value="66">Yozgat</option>
+                                            <option value="67">Zonguldak</option>
+                                            <option value="68">Aksaray</option>
+                                            <option value="69">Bayburt</option>
+                                            <option value="70">Karaman</option>
+                                            <option value="71">Kırıkkale</option>
+                                            <option value="72">Batman</option>
+                                            <option value="73">Şırnak</option>
+                                            <option value="74">Bartın</option>
+                                            <option value="75">Ardahan</option>
+                                            <option value="76">Iğdır</option>
+                                            <option value="77">Yalova</option>
+                                            <option value="78">Karabük</option>
+                                            <option value="79">Kilis</option>
+                                            <option value="80">Osmaniye</option>
+                                            <option value="81">Düzce</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Ay:</label>
+                                        <select id="month">
+                                            <option value="1">Ocak</option>
+                                            <option value="2">Şubat</option>
+                                            <option value="3">Mart</option>
+                                            <option value="4">Nisan</option>
+                                            <option value="5">Mayıs</option>
+                                            <option value="6">Haziran</option>
+                                            <option value="7">Temmuz</option>
+                                            <option value="8">Ağustos</option>
+                                            <option value="9">Eylül</option>
+                                            <option value="10">Ekim</option>
+                                            <option value="11">Kasım</option>
+                                            <option value="12">Aralık</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Yıl:</label>
+                                        <select id="year">
+                                            <option value="2025">2025</option>
+                                            <option value="2026">2026</option>
+                                        </select>
+                                    </div>
+                                    <div class="button-group">
+                                        <button id="predict-button" class="predict-btn">
+                                            <i class="fas fa-chart-line"></i> Tahmin Et
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .prediction-container {
+                padding: 1rem;
+                height: calc(100vh - 120px); /* Adjusted height calculation */
+                overflow: auto; /* Changed from hidden to auto */
+            }
+            
+            .widget-grid {
+                display: grid;
+                grid-template-rows: 60% 35%; /* Adjusted proportions */
+                gap: 2rem;
+                height: 100%;
+                min-height: 0;
+                padding-bottom: 1rem; /* Added padding at bottom */
+            }
+            
+            .chart-widget {
+                min-height: 400px; /* Added minimum height */
+                max-height: 600px; /* Added maximum height */
+                background: linear-gradient(135deg, #2d1c77, #1a1053);
+                border-radius: 15px;
+                padding: 1.5rem;
+                color: white;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+
+            .chart-container {
+                height: 100%;
+                padding: 1rem;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 12px;
+                backdrop-filter: blur(10px);
+            }
+            
+            .prediction-widget {
+                min-height: 150px; /* Reduced from 200px */
+                max-height: 200px; /* Reduced from 300px */
+                overflow: hidden;
+                background: linear-gradient(135deg, #2d1c77, #1a1053);
+                border-radius: 15px;
+                padding: 1rem;
+                color: white;
+                height: 100%;
+            }
+            
+            .compact-form {
+                height: auto; /* Changed from 100% */
+                padding: 0.5rem;
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(10px);
+                border-radius: 12px;
+            }
+            
+            .input-row {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                padding: 0.5rem;
+                flex-wrap: wrap; /* Added to handle overflow better */
+            }
+            
+            .input-group {
+                flex: 1;
+                min-width: 150px; /* Added minimum width */
+                max-width: 200px; /* Added maximum width */
+            }
+            
+            .input-group label {
+                font-size: 0.8rem;
+                font-weight: 500;
+                color: rgba(255, 255, 255, 0.9);
+                margin-bottom: 0.25rem;
+                display: block;
+            }
+            
+            .input-group select {
+                width: 100%;
+                padding: 0.5rem;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 6px;
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                font-size: 0.9rem;
+                transition: all 0.2s ease;
+            }
+            
+            .input-group select option {
+                background: #2d1c77;
+                color: white;
+                padding: 8px;
+            }
+            
+            .input-group select:focus {
+                border-color: #00ff88;
+                background: rgba(255, 255, 255, 0.15);
+                outline: none;
+            }
+
+            .button-group {
+                display: flex;
+                align-items: flex-end;
+                padding-bottom: 0.25rem;
+            }
+            
+            .predict-btn {
+                padding: 0.5rem 1.5rem;
+                background: #00ff88;
+                color: #1a1053;
+                border: none;
+                border-radius: 6px;
+                font-size: 0.9rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            
+            .predict-btn:hover {
+                background: #00cc6a;
+                transform: translateY(-2px);
+            }
+
+            .form-header h3 {
+                font-size: 1rem;
+                margin-bottom: 0.75rem;
+            }
+
+            /* Ensuring responsiveness */
+            @media (max-width: 768px) {
+                .input-row {
+                    flex-direction: column;
+                    gap: 0.5rem;
+                }
+                
+                .button-group {
+                    width: 100%;
+                    padding: 0.5rem 0;
+                }
+                
+                .predict-btn {
+                    width: 100%;
+                    justify-content: center;
+                }
+
+                .widget-grid {
+                    grid-template-rows: auto auto; /* Make it more flexible on mobile */
+                    gap: 1rem;
+                }
+                
+                .prediction-container {
+                    height: auto;
+                    min-height: calc(100vh - 120px);
+                }
+
+                .prediction-widget {
+                    min-height: auto;
+                    max-height: none;
+                }
+                
+                .input-group {
+                    max-width: 100%;
+                    width: 100%;
+                }
+            }
+        </style>
+
+        <script>
+            // Çıkış butonunun işlevi
+            document.getElementById('logout-button').addEventListener('click', () => {
+                if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
+                    // Kullanıcıyı giriş ekranına yönlendir
+                    window.location.href = '/';  // Burada yönlendirme yapılabilir
+                }
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('predictionChart').getContext('2d');
+                let predictionChart = null;
+
+                // Update chart configuration
+                const createChart = (data) => {
+                    return new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Tahmini Satış',
+                                data: data.predictions,
+                                borderColor: '#00ff88',
+                                backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                                tension: 0.4,
+                                borderWidth: 3,
+                                pointBackgroundColor: '#00ff88',
+                                pointRadius: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: 'white',
+                                        font: {
+                                            size: 12
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    },
+                                    ticks: {
+                                        color: 'white',
+                                        font: {
+                                            size: 11
+                                        }
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    },
+                                    ticks: {
+                                        color: 'white',
+                                        font: {
+                                            size: 11
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                };
+
+                document.getElementById('predict-button').addEventListener('click', async () => {
+                    const city = document.getElementById('city').value;
+                    const month = document.getElementById('month').value;
+                    const year = document.getElementById('year').value;
+
+                    try {
+                        const response = await fetch(`/api/predictions?city=${city}&month=${month}&year=${year}`);
+                        const data = await response.json();
+
+                        if (predictionChart) {
+                            predictionChart.destroy();
+                        }
+
+                        predictionChart = createChart(data);
+                    } catch (error) {
+                        console.error('Error fetching prediction data:', error);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

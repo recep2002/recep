@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KDS - Modern Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .wide-widget {
+            width: 80%; /* Widget genişliğini artırmak için %80 yapıyoruz */
+            margin: 0 auto; /* Ortalamak için margin ekliyoruz */
+            margin-bottom: 20px; /* Alt boşluk ekliyoruz */
+        }
+
+        .widget canvas {
+            width: 100% !important; /* Canvas genişliğini %100 yapıyoruz */
+            height: auto !important; /* Canvas yüksekliğini otomatik yapıyoruz */
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>TOGG</h2>
+            <ul class="menu">
+                <li><a href="dashboard.html"><i class="fas fa-home"></i><span class="menu-text">Ana Sayfa</span></a></li>
+                <li><a href="kullanici.html"><i class="fas fa-user"></i><span class="menu-text">Kullanıcı Talepleri</span></a></li>
+                <li><a href="analiz.html"><i class="fas fa-chart-line"></i><span class="menu-text">Haritalı Analiz</span></a></li>
+                <li><a href="satis.html"><i class="fas fa-solid fa-truck"></i><span class="menu-text">Satış</span></a></li>
+                <li><a href="tahminleme.html"><i class="fas fa-solid fa-business-time"></i><span class="menu-text">Tahminleme</span></a></li>
+                <li><a href="istasyon.html"><i class="fas fa-solid fa-bolt"></i><span class="menu-text">İstasyon</span></a></li>
+            </ul>
+            <ul class="settings">
+                <li><a href="#"><i class="fas fa-cog"></i><span class="menu-text">Ayarlar</span></a></li>
+            </ul>
+            <ul class="logout">
+                <li><a href="#" id="logout-button"><i class="fas fa-sign-out-alt"></i><span class="menu-text">Çıkış Yap</span></a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <header class="main-header">
+                <h1>TOGG</h1>
+                <p>Şarj istasyonu talebi</p>
+            </header>
+            <div class="widgets">
+                <div class="widget wide-widget">
+                    <h3>En Yüksek Talepli 6 İl</h3>
+                    <canvas id="chart1"></canvas>
+                    <select class="chart-select">
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                    </select>
+                </div>
+                
+                <div class="widget wide-widget">
+                    <h3>İl Bazlı Talepler</h3>
+                    <canvas id="chart2"></canvas>
+                    <select class="chart-select">
+                        <option value="">İl Seçiniz</option>
+                        <option value="Ankara">Ankara</option>
+                        <option value="Antalya">Antalya</option>
+                        <option value="Bursa">Bursa</option>
+                        <option value="İstanbul">İstanbul</option>
+                        <option value="İzmir">İzmir</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let chart1Instance = null;
+            
+            // İlk yükleme için 2023 verilerini getir
+            updateChart('2023');
+        
+            // Select box değişikliğini dinle
+            document.querySelector('.chart-select').addEventListener('change', function(e) {
+                const selectedYear = e.target.value;
+                updateChart(selectedYear);
+            });
+        
+            function updateChart(year) {
+                fetch(`/api/talepler/${year}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const iller = data.map(item => item.il_adi);
+                        const talepSayilari = data.map(item => item.talep_sayisi);
+        
+                        // Eğer önceki chart varsa yok et
+                        if (chart1Instance) {
+                            chart1Instance.destroy();
+                        }
+        
+                        // Yeni chart oluştur
+                        var ctx1 = document.getElementById('chart1').getContext('2d');
+                        chart1Instance = new Chart(ctx1, {
+                            type: 'bar',
+                            data: {
+                                labels: iller,
+                                datasets: [{
+                                    label: `${year} İllere Göre Talep Sayıları`,
+                                    data: talepSayilari,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+        </script>
+
+
+<script>
+  let chart2Instance = null;
+
+document.querySelectorAll('.chart-select')[1].addEventListener('change', function(e) {
+    const selectedCity = e.target.value;
+    updateChart2(selectedCity);
+});
+
+function updateChart2(city) {
+    fetch(`/api/talepler/il/${city}/tumYillar`)
+        .then(response => response.json())
+        .then(data => {
+            if (chart2Instance) {
+                chart2Instance.destroy();
+            }
+
+            var ctx2 = document.getElementById('chart2').getContext('2d');
+            chart2Instance = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: ['2023', '2024'],
+                    datasets: [{
+                        label: `${city} İli Talep Sayıları`,
+                        data: data.map(item => item.talep_sayisi),
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error:', error));
+}
+    </script>
+
+<script>
+    // Çıkış butonunun işlevi
+    document.getElementById('logout-button').addEventListener('click', () => {
+        if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
+            // Kullanıcıyı giriş ekranına yönlendir
+            window.location.href = '/';  // Burada yönlendirme yapılabilir
+        }
+    });
+</script>
+</body>
+</html>
